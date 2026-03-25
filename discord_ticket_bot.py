@@ -1,26 +1,26 @@
-    import discord
-    from discord.ext import commands
-    import os
-    import re
-    import asyncio
-    import aiohttp
-    import json
-    import struct
-    import zlib
+import discord
+from discord.ext import commands
+import os
+import re
+import asyncio
+import aiohttp
+import json
+import struct
+import zlib
     
     
-    # ─── PNG ICON GENERATOR ────────────────────────────────────────────────────────
-    def _make_icon_png(width=420, height=420, r=88, g=101, b=242):
-        """Generate a solid-colour PNG in memory — no Pillow needed."""
-    
-        def chunk(tag, data):
-            c = tag + data
-            return (
-                struct.pack(">I", len(data))
-                + c
-                + struct.pack(">I", zlib.crc32(c) & 0xFFFFFFFF)
-            )
-    
+# ─── PNG ICON GENERATOR ────────────────────────────────────────────────────────
+def _make_icon_png(width=420, height=420, r=88, g=101, b=242):
+    """Generate a solid-colour PNG in memory — no Pillow needed."""
+
+    def chunk(tag, data):
+        c = tag + data
+        return (
+            struct.pack(">I", len(data))
+            + c
+            + struct.pack(">I", zlib.crc32(c) & 0xFFFFFFFF)
+       )
+
         sig = b"\x89PNG\r\n\x1a\n"
         ihdr = chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
         raw = b"".join(b"\x00" + bytes([r, g, b] * width) for _ in range(height))
